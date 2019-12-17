@@ -8,14 +8,21 @@
 </head>
 <body>
     <script>
-        let ws = new WebSocket('ws://localhost:9000/ws');
+        // we create a websocket instance and pass in the server address
+        // this connects to the server
+        let ws = new WebSocket('ws://localhost:9000/ws?uuid=51');
         console.log(ws)
-        ws.onmessage = (event) =>{
-            console.log(event.data)
-        };
+
+        // we can now listen for the onopen event to be sure that the connection was successful
         ws.onopen = (event) =>{
             ws.send('I am connected');
         }
+
+        // we can also listen to the onmessage event to listen from messages from the server
+        ws.onmessage = (event) =>{
+            console.log(event.data)
+        };
+       
     </script>
 </body>
 </html>
