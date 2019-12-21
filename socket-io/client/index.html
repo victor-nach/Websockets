@@ -15,10 +15,10 @@
         // you can also pass in optional parameters and query parameters
         // the socket instance returned here is the same as the one returned inside the callback if the connection is successful on the server 
         // this can also take in optional parameters such as path ... 
-        const socket = io('http://localhost:3000?name=victor&court=court14');
+        const socket = io('http://localhost:5000/court-room?name=victor&court=court14');
 
         // openning a second conection would act as a new and different client to the server 
-        const socket2 = io('http://localhost:3000');
+        // const socket2 = io('http://localhost:3000');
 
         // we use the 'on' method to listen for specific events
         socket.on('welcome', data => {
@@ -27,13 +27,17 @@
         })
 
         // USING NAMESPACES
-        const socket3 = io('http://localhost:3000/games')
+        const socket3 = io('http://localhost:5000/games?name=victor&court=court14')
 
         socket3.on('welcome', data => {
             console.log(data);
         });
 
-        socket3.emit('joinRoom', 'myRoom')
+        socket3.on('room', data => {
+            console.log('room', data);
+        });
+
+        socket3.emit('joinRoom', 'court14')
     </script>
 </body>
 </html>
