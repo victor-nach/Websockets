@@ -25,15 +25,30 @@ io.on('connection', socket => {
 io.of('/games').on('connection', socket => {
     console.log('new client connected to the games namespace with id: ', socket.id);
 
+    // the handsh
+    const { name, court } = socket.handshake.query;
+    console.log( name, court );
+
     // you can use event names which are the same in other namespaces 
     socket.emit('welcome', 'welcome to the games namespace')
 
     // JOINING ROOMS
     // we can use the events method to allow sockets join rooms
-    socket.on('joinRoom', room => {
+    socket.on('joinRoom', court => {
 
         // for the first person that tries to join this room, if it doesn't exist, that room is created
-        socket.join(room)
+        socket.join(court, (err) => {
+            if (err) console.log('could not join room')
+            else console.log(`successfully joined ${court}`)
+        })
+    })
+
+    // or we can also join a room automatially on connection 
+    // for the first person that tries to join this room, if it doesn't exist, that room is created
+    socket.join(court, (err) => {
+        if (err) console.log('could not join room')
+        else console.log(`${name} successfully joined ${court}`);
+        io.of('/games').in(court).emit('room', `welcome to room${court}`);
     })
 });
 
